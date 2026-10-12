@@ -1,0 +1,245 @@
++/
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garang Business Company</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f2f5fa;color:#17233c}
+header{background:#101d3a;color:white;padding:22px 16px}
+header h1{margin:0;font-size:25px}
+header p{color:#cbd8f3;margin-bottom:0}
+nav{background:#1b2e53;padding:14px;display:flex;gap:18px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-weight:bold}
+.hero{padding:42px 20px;background:linear-gradient(135deg,#173c78,#087eae);color:white}
+.hero h2{font-size:32px;margin:0 0 12px}
+main{max-width:1000px;margin:auto;padding:20px}
+section{margin:24px 0}
+h2{color:#173c78}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.card,form{background:white;padding:20px;border-radius:12px;box-shadow:0 4px 14px #12254b12}
+.card h3{margin-top:0}
+.price{font-size:23px;font-weight:bold;color:#087eae}
+input,select,textarea{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #ccd5e3;border-radius:7px;font:inherit}
+button,.button{background:#087eae;color:white;border:0;padding:12px 17px;border-radius:7px;font-weight:bold;cursor:pointer}
+button:hover{background:#075e85}
+small,.muted{color:#5e6b80}
+.status{margin-top:12px;overflow-wrap:anywhere}
+footer{background:#101d3a;color:white;padding:22px;text-align:center;margin-top:35px}
+label{font-weight:bold}
+</style>
+</head>
+<body>
+<header>
+  <h1>Garang Business Company</h1>
+  <p>Website hosting and a marketplace for businesses.</p>
+</header>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#hosting">Hosting</a>
+  <a href="#marketplace">Marketplace</a>
+  <a href="#sell">List a Business</a>
+</nav>
+
+<div class="hero" id="home">
+  <h2>Build. Host. Grow.</h2>
+  <p>Discover business listings and request a website hosting plan.</p>
+  <a class="button" href="#marketplace">Explore Marketplace</a>
+</div>
+
+<main>
+<section id="hosting">
+  <h2>Website Hosting Plans</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Starter</h3>
+      <p class="price">KSh 300/month</p>
+      <p>For a small business website.</p>
+      <button type="button" onclick="choosePlan('Starter')">Choose Starter</button>
+    </div>
+    <div class="card">
+      <h3>Business</h3>
+      <p class="price">KSh 800/month</p>
+      <p>For a growing business.</p>
+      <button type="button" onclick="choosePlan('Business')">Choose Business</button>
+    </div>
+    <div class="card">
+      <h3>Professional</h3>
+      <p class="price">KSh 1,500/month</p>
+      <p>For a larger online project.</p>
+      <button type="button" onclick="choosePlan('Professional')">Choose Professional</button>
+    </div>
+  </div>
+  <p class="muted">Demo prices only. Hosting is not yet activated or available for purchase.</p>
+
+  <form id="hostingForm">
+    <h3>Request Hosting</h3>
+    <label for="hostName">Your name</label>
+    <input id="hostName" required maxlength="80" placeholder="Your name">
+    <label for="hostEmail">Email</label>
+    <input id="hostEmail" type="email" required maxlength="120" placeholder="you@example.com">
+    <label for="hostPlan">Hosting plan</label>
+    <select id="hostPlan" required>
+      <option value="Starter">Starter</option>
+      <option value="Business">Business</option>
+      <option value="Professional">Professional</option>
+    </select>
+    <label for="domain">Domain name (optional)</label>
+    <input id="domain" maxlength="120" placeholder="example.co.ke">
+    <button type="submit">Submit Hosting Request</button>
+    <p id="hostStatus" class="status" role="status"></p>
+  </form>
+</section>
+
+<section id="marketplace">
+  <h2>Business Marketplace</h2>
+  <p>Browse products and services listed by businesses.</p>
+  <div id="listings" class="grid">
+    <p>Loading listings...</p>
+  </div>
+</section>
+
+<section id="sell">
+  <h2>List Your Business</h2>
+  <form id="listingForm">
+    <label for="business">Business name</label>
+    <input id="business" required maxlength="80" placeholder="Your business name">
+    <label for="title">Product or service</label>
+    <input id="title" required maxlength="100" placeholder="What are you offering?">
+    <label for="category">Category</label>
+    <select id="category">
+      <option>Technology</option>
+      <option>Clothing</option>
+      <option>Electronics</option>
+      <option>Food</option>
+      <option>Beauty</option>
+      <option>Education</option>
+      <option>Other</option>
+    </select>
+    <label for="price">Price in Kenyan shillings (KES)</label>
+    <input id="price" type="number" min="0" max="100000000" step="0.01" required placeholder="e.g. 1500">
+    <label for="description">Description</label>
+    <textarea id="description" rows="3" required maxlength="500" placeholder="Describe your product or service"></textarea>
+    <label for="contact">Seller contact (email or phone)</label>
+    <input id="contact" required maxlength="100" placeholder="Business contact">
+    <button type="submit">Publish Listing</button>
+    <p id="listingStatus" class="status" role="status"></p>
+  </form>
+</section>
+</main>
+
+<footer>
+  <p>Businesses Host's &copy; 2026</p>
+  <p>Helping businesses grow online.</p>
+</footer>
+
+<script>
+function choosePlan(plan) {
+  document.getElementById("hostPlan").value = plan;
+  document.getElementById("hostingForm").scrollIntoView({behavior:"smooth"});
+}
+
+async function requestApi(url, data) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(data)
+  });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error || "Request failed");
+  return result;
+}
+
+async function loadListings() {
+  const container = document.getElementById("listings");
+  try {
+    const response = await fetch("/api/listings");
+    if (!response.ok) throw new Error("Could not load listings");
+    const listings = await response.json();
+    container.replaceChildren();
+
+    if (!listings.length) {
+      container.textContent = "No listings yet. Be the first to list a business!";
+      return;
+    }
+
+    listings.forEach(item => {
+      const card = document.createElement("article");
+      card.className = "card";
+
+      const heading = document.createElement("h3");
+      heading.textContent = item.title;
+
+      const business = document.createElement("p");
+      business.textContent = item.business + " · " + item.category;
+
+      const price = document.createElement("p");
+      price.className = "price";
+      price.textContent = "KSh " + Number(item.price).toLocaleString("en-KE");
+
+      const description = document.createElement("p");
+      description.textContent = item.description;
+
+      const contact = document.createElement("p");
+      contact.textContent = "Contact: " + item.contact;
+
+      card.append(heading, business, price, description, contact);
+      container.append(card);
+    });
+  } catch {
+    container.textContent = "Unable to load listings. Check that the server is running.";
+  }
+}
+
+document.getElementById("listingForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  const status = document.getElementById("listingStatus");
+  status.textContent = "Publishing...";
+
+  const data = {
+    business: document.getElementById("business").value,
+    title: document.getElementById("title").value,
+    category: document.getElementById("category").value,
+    price: document.getElementById("price").value,
+    description: document.getElementById("description").value,
+    contact: document.getElementById("contact").value
+  };
+
+  try {
+    const result = await requestApi("/api/listings", data);
+    status.textContent = result.message;
+    event.target.reset();
+    await loadListings();
+  } catch (error) {
+    status.textContent = error.message;
+  }
+});
+
+document.getElementById("hostingForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  const status = document.getElementById("hostStatus");
+  status.textContent = "Submitting...";
+
+  const data = {
+    name: document.getElementById("hostName").value,
+    email: document.getElementById("hostEmail").value,
+    plan: document.getElementById("hostPlan").value,
+    domain: document.getElementById("domain").value
+  };
+
+  try {
+    const result = await requestApi("/api/hosting", data);
+    status.textContent = result.message;
+    event.target.reset();
+  } catch (error) {
+    status.textContent = error.message;
+  }
+});
+
+loadListings();
+</script>
+</body>
+</html>
